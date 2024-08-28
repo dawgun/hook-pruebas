@@ -1,0 +1,36 @@
+#!/usr/bin/env node
+
+const isCJS = typeof module !== 'undefined' && module.exports;
+let fs;
+
+console.log(`\n\x1b[33mExecuting commit-msg hook under ${isCJS ? 'CJS' : 'ESM'} engine`);
+
+async function loadFsModule() {
+    if (isCJS) {
+        fs = require('fs');
+    } else {
+        fs = await import('fs').then(module => module.default);
+    }
+}
+
+async function validateCommitMessage() {
+    await loadFsModule();
+
+    const message = fs.readFileSync(process.argv[2], 'utf8').trim();
+    const isValidLength = message.length >= 10 && message.length <= 72;
+
+    if (!isValidLength) {
+        console.error(
+            '\n\x1b[31m(ERROR) The length of the commit message must be between 10 and 72 characters.\n'
+        );
+        process.exit(1);
+    }
+
+    process.exit(0);
+}
+
+validateCommitMessage();
+
+
+
+
