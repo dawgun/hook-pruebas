@@ -34,7 +34,7 @@ const validatePreCommit = async () => {
     .split("\n")
     .filter(
       (staggedFile) =>
-        staggedFile.endsWith(".js") || staggedFile.endsWith(".ts")
+        staggedFile.endsWith(".js") || staggedFile.endsWith(".ts") || staggedFile.endsWith(".jsx") || staggedFile.endsWith(".tsx")
     );
 
   staggedFilesWithJsOrTs.forEach((staggedFile) => {
